@@ -11,7 +11,7 @@ const menu = [
     {
       id: 2,
       title: "diner double",
-      category: "lunch",
+      category: "brunch",
       price: 13.99,
       img: "./Components/Assets/item-2.jpg",
       desc: `Enjoy our savory burger with crisp fries—a perfect blend of juicy chicken, fresh toppings, and golden, seasoned potatoes.`,
@@ -88,40 +88,41 @@ const menu = [
     {
       id: 11,
       title: "pizza",
-      category: "lunch",
+      category: "dinner",
       price: 22.99,
       img: "./Components/Assets/item-11.jpg",
       desc: `Savor our vegan steak, a culinary masterpiece crafted with plant-based 
       ingredients that deliver the hearty texture and robust
       flavors you crave, guilt-free and deliciously satisfying.`,
     },
+    {
+      id : 12,
+      title : "Bruschetta Trio Sampler",
+      category : "brunch",
+      price : 15.99,
+      img :"./Components/Assets/item-12.jpg" , 
+      desc : `Creamy mashed avocados mixed with fresh lime juice, 
+      cherry tomatoes, red onion, and cilantro. Add a kick with optional
+       jalapeños, served on crunchy toasted baguette slices for a vibrant and delightful appetizer.`
+
+    }
   ];
   const sectionCenter = document.querySelector('.section-center');
-  const filterBtns = document.querySelectorAll('.filter-btn')
+  const container = document.querySelector('.btn-container')
+  
   
   // load all items 
+
+  // get all unique categories 
+
+  // get only unique categories 
   window.addEventListener('DOMContentLoaded' , function(){
     displayMenuItems(menu);
-  });
-  // filter items 
-  filterBtns.forEach(function(btn){
-   btn.addEventListener('click' , function(e){
-   const category = (e.currentTarget.dataset.id);
-   const menuCategory = menu.filter(function(menuItem){ // here the menuItem is just new variable it has nothing to do with that function or anything 
-    if(menuItem.category === category){
-        return menuItem;
-    }
-   
-   })
-  // console.log(menuCategory);
-  if(category === "all"){
-    displayMenuItems(menu) // everything need to be displayed 
-  }else{
-    displayMenuItems(menuCategory)
-  }
-   });
+    displayMenuButtons();
     
   });
+  // filter items 
+  
 function displayMenuItems(menuItems){
     console.log("display menuItems function is retrived")
     let displayMenu = menuItems.map(function(item){
@@ -146,3 +147,44 @@ function displayMenuItems(menuItems){
      console.log("section center get all data")
 
 }
+function displayMenuButtons(){
+  const categories = menu.reduce(function(values , item){
+    if(!values.includes(item.category)){
+      values.push(item.category);
+    }
+    return values
+
+  },["all"]);
+  const CategoryBtns = categories.map(function(category){
+    return `<button class = "filter-btn"  type = "button"
+    data-id=${category}> ${category} </button>`
+    // do not get confused we commented out the filter btn in html but the class is dynamically defined in app that is why it is there to retrieve 
+  }).join("");
+  console.log(CategoryBtns)
+  container.innerHTML = CategoryBtns;
+  const filterBtns = container.querySelectorAll('.filter-btn')
+  // container and document both could work in above case 
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click' , function(e){
+    const category = (e.currentTarget.dataset.id);
+    const menuCategory = menu.filter(function(menuItem){ // here the menuItem is just new variable it has nothing to do with that function or anything 
+     if(menuItem.category === category){
+         return menuItem;
+     }
+    
+    })
+   // console.log(menuCategory);
+   if(category === "all"){
+     displayMenuItems(menu) // everything need to be displayed 
+   }else{
+     displayMenuItems(menuCategory)
+   }
+    });
+     
+   });
+
+}
+
+
+// reduce method 
+// reduce the elements of the array to a single value 
